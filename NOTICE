@@ -1,0 +1,14 @@
+NOTICE
+
+This product includes the following third-party software:
+
+1. ParlerTTS
+   - Source: https://github.com/huggingface/parler-tts
+   - Copyright: 2024 The HuggingFace Inc. team
+   - License: Apache License 2.0
+   - Modifications:
+     -Refactored the training script to make it easier to use with SageMaker and more modular. 
+     -Wrote inference code for SageMaker.
+     - The rest of the code in src/parler_tts is original
+
+All modifications were made to adapt the software for easier training and inference with SageMaker the original functionality and licensing terms. The modified versions remain under their respective original licenses (Apache 2.0 for ParlerTTS and MIT for DataSpeech).
