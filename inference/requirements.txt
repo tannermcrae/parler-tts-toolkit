@@ -1,0 +1,7 @@
+# Running inference off pytorch/pytorch:2.5.1-cuda12.4-cudnn9-runtime so torch and cuda already installed
+transformers==4.46.1
+torchserve==0.12.0
+sentencepiece
+descript-audio-codec
+git+https://github.com/descriptinc/audiotools
+protobuf>=4.0.0

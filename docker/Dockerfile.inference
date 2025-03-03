@@ -1,0 +1,54 @@
+# Build stage for dependencies
+FROM pytorch/pytorch:2.5.1-cuda12.4-cudnn9-runtime AS builder
+
+USER root
+RUN apt-get update && apt-get install -y git
+
+# Install Java (required for torchserve)
+RUN apt-get update && apt-get install -y \
+    openjdk-11-jdk \
+    && rm -rf /var/lib/apt/lists/*
+
+
+WORKDIR /opt/program
+COPY inference/requirements.txt .
+RUN pip install -r requirements.txt
+
+# Add this for torchserve
+ENV TORCHSERVE_JAVA_HOME=$JAVA_HOME
+
+# Final stage
+FROM builder
+
+# Add GPU verification label
+LABEL com.amazonaws.sagemaker.inference.cuda.verified_versions=12.4
+
+# Copy config (this will be a separate layer that changes more frequently)
+COPY inference/config.properties .
+
+# Copy entrpoint script
+COPY inference/entrypoint.sh .
+RUN chmod +x entrypoint.sh
+
+# Create the model directory (if running outside of SageMaker)
+RUN mkdir -p /opt/ml/model
+
+# Set all environment variables in one place
+ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64 \
+    PATH=$JAVA_HOME/bin:$PATH \
+    TORCHSERVE_JAVA_HOME=$JAVA_HOME \
+    PYTHONPATH="${PYTHONPATH}:/opt/ml/model"
+
+# Disable token authorization when running in SageMaker
+# This makes the ping work and authentication is handled by IAM.
+# TODO: Remove this if you're running outside of SageMaker.
+ENV TS_DISABLE_TOKEN_AUTHORIZATION=true
+
+# Make GPUs visibile
+ENV NVIDIA_VISIBLE_DEVICES=all
+ENV CUDA_VISIBLE_DEVICES=0
+
+EXPOSE 8080
+
+# SageMaker always runs the container like docker image serve so we need to handle that in the script.
+ENTRYPOINT ["/opt/program/entrypoint.sh"]
