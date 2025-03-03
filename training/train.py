@@ -64,7 +64,7 @@ from utils import (
     get_last_codec_checkpoint_step,
 )
 from arguments import ModelArguments, DataTrainingArguments, ParlerTTSTrainingArguments
-from data import load_multiple_datasets, DataCollatorParlerTTSWithPadding, DataCollatorEncodecWithPadding
+from data import DataCollatorParlerTTSWithPadding, DataCollatorEncodecWithPadding
 from eval import clap_similarity, wer, si_sdr
 from trainer import ParlerTTSTrainer
 from data_processor import DataProcessor

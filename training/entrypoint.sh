@@ -12,16 +12,19 @@ else
 fi
 
 # Remove checkpoints
-rm -rf model_artifacts/checkpoint-*
+rm -rf /opt/ml/model/checkpoint-*
 
+# cp -r model_artifacts/* /opt/ml/model
+
+# Removing dependency on torch serve and dumping model files without archiving.
 # Archive the model and place it in the /opt/ml/model directory so SageMaker will pick it up.
-torch-model-archiver --model-name tts_model \
-    --version 1.0 \
-    --handler inference/handler.py \
-    --extra-files "model_artifacts/,src/" \
-    --export-path /opt/ml/model \
-    --requirements-file inference/requirements.txt \
-    --force
+# torch-model-archiver --model-name tts_model \
+#     --version 1.0 \
+#     --handler inference/handler.py \
+#     --extra-files "model_artifacts/,src/" \
+#     --export-path /opt/ml/model \
+#     --requirements-file inference/requirements.txt \
+#     --force
 
 
 

@@ -43,7 +43,7 @@
     "audio_encoder_per_device_batch_size": 8,
     "dtype": "bfloat16",
     "seed": 456,
-    "output_dir": "/opt/program/model_artifacts",
+    "output_dir": "/opt/ml/model",
     "overwrite_output_dir": true,
     "predict_with_generate": true,
     "include_inputs_for_metrics": true,
